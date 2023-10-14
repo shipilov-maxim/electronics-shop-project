@@ -1,3 +1,9 @@
+import csv
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -13,7 +19,7 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
-        self.name = name
+        self._name = name
         self.price = price
         self.quantity = quantity
         self.all.append(self)
@@ -31,3 +37,38 @@ class Item:
         Применяет установленную скидку для конкретного товара.
         """
         self.price *= self.pay_rate
+
+    @classmethod
+    def instantiate_from_csv(cls, path):
+        """
+        Класс-метод, инициализирующий экземпляры
+        класса Item данными из файла csv
+        """
+        path_csv = BASE_DIR / path
+        cls.all = []
+        with open(path_csv, newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                cls(row['name'],
+                    row['price'],
+                    row['quantity'])
+
+    @staticmethod
+    def string_to_number(string):
+        if '.' in string:
+            dot = string.find('.')
+            return int(string[:dot])
+        else:
+            return int(string)
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        if len(name) <= 10:
+            self._name = name
+        else:
+            self._name = name[:10]
+            print('Exception: Длина наименования товара превышает 10 символов.')
