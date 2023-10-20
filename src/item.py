@@ -30,6 +30,12 @@ class Item:
     def __str__(self):
         return f"{self._name}"
 
+    def __add__(self, other):
+        """Функция сложения остатка у экземпляров класса Item и его наследников"""
+        if isinstance(self, Item):
+            return self.quantity + other.quantity
+        return None
+
     def calculate_total_price(self) -> float:
         """
         Рассчитывает общую стоимость конкретного товара в магазине.

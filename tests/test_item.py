@@ -1,6 +1,7 @@
 """Здесь надо написать тесты с использованием pytest для модуля item."""
 import pytest
 from src.item import Item
+from src.phone import Phone
 from pathlib import Path
 
 
@@ -10,6 +11,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 @pytest.fixture
 def item():
     return Item("Смартфон", 10000, 20)
+
+
+@pytest.fixture
+def phone():
+    return Phone("iPhone 15", 150_000, 9, 1)
 
 
 @pytest.fixture
@@ -34,14 +40,11 @@ def test_instantiate_from_csv(path):
     assert len(Item.all) == 5
 
 
-def test_name():
-    a = Item('abcdefghiklmn', 1, 1)
-    a.name = 'abcdefg'
-    assert a.name == 'abcdefg'
-    a.name = 'abcdefghiklm'
-    assert a.name == 'abcdefghik'
-    with pytest.raises(AttributeError):
-        item.name == "Смартфон"
+def test_name(item):
+    item.name = 'abcdefg'
+    assert item.name == 'abcdefg'
+    item.name = 'abcdefghiklm'
+    assert item.name == 'abcdefghik'
 
 
 def test_string_to_number():
@@ -49,7 +52,10 @@ def test_string_to_number():
     assert Item.string_to_number('123.9') == 123
 
 
-def test_repr_and_str():
-    item = Item("Смартфон", 10000, 20)
+def test_repr_and_str(item):
     assert repr(item) == "Item('Смартфон', 10000, 20)"
     assert str(item) == 'Смартфон'
+
+
+def test_add(item, phone):
+    assert item + phone == 29
