@@ -23,6 +23,7 @@ class Item:
         self.price = price
         self.quantity = quantity
         self.all.append(self)
+        super().__init__()
 
     def __repr__(self):
         return f"{self.__class__.__name__}('{self._name}', {self.price}, {self.quantity})"
@@ -34,7 +35,6 @@ class Item:
         """Функция сложения остатка у экземпляров класса Item и его наследников"""
         if isinstance(self, Item):
             return self.quantity + other.quantity
-        return None
 
     def calculate_total_price(self) -> float:
         """
