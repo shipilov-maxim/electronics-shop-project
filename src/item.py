@@ -4,6 +4,11 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+class InstantiateCSVError(Exception):
+    def __init__(self):
+        self.message = "Файл item.csv поврежден"
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -56,14 +61,23 @@ class Item:
         Класс-метод, инициализирующий экземпляры
         класса Item данными из файла csv
         """
-        path_csv = BASE_DIR / path
         cls.all = []
-        with open(path_csv, newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                cls(row['name'],
-                    row['price'],
-                    row['quantity'])
+        try:
+            path_csv = BASE_DIR/path
+            with open(path_csv, encoding="windows-1251") as file:
+                reader = csv.DictReader(file)
+                try:
+                    for row in reader:
+                        cls(name=str(row['name']),
+                            price=float(row['price']),
+                            quantity=int(row['quantity']))
+                except KeyError:
+                    raise InstantiateCSVError
+
+        except FileNotFoundError:
+            print("Отсутствует файл items.csv")
+        except InstantiateCSVError as m:
+            print(m.message)
 
     @staticmethod
     def string_to_number(string):
@@ -83,4 +97,4 @@ class Item:
             self._name = name
         else:
             self._name = name[:10]
-            print('Exception: Длина наименования товара превышает 10 символов.')
+            # raise Exception("Длина наименования товара превышает 10 символов.")
