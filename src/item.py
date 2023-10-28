@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 class InstantiateCSVError(Exception):
     def __init__(self):
-        self.message = "Файл item.csv поврежден"
+        self.message = "Файл items.csv поврежден"
 
 
 class Item:
@@ -73,9 +73,8 @@ class Item:
                             quantity=int(row['quantity']))
                 except KeyError:
                     raise InstantiateCSVError
-
         except FileNotFoundError:
-            print("Отсутствует файл items.csv")
+            raise FileNotFoundError("Отсутствует файл items.csv")
         except InstantiateCSVError as m:
             print(m.message)
 
