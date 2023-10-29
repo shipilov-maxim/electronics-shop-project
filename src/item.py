@@ -75,8 +75,8 @@ class Item:
                     raise InstantiateCSVError
         except FileNotFoundError:
             raise FileNotFoundError("Отсутствует файл items.csv")
-        except InstantiateCSVError as m:
-            print(m.message)
+        # except InstantiateCSVError as m:
+        #     print(m.message)
 
     @staticmethod
     def string_to_number(string):

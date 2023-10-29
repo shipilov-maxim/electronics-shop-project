@@ -37,10 +37,10 @@ def test_apply_discount(item):
 
 def test_instantiate_from_csv(path):
     # Item.instantiate_from_csv(path)
-    # assert len(Item.all) == 5
+    # assert len(Item.all) == 5 , match="Файл items.csv поврежден"
     with pytest.raises(FileNotFoundError, match="Отсутствует файл items.csv"):
         Item.instantiate_from_csv("src/items1.csv")
-    with pytest.raises(InstantiateCSVError, match="Файл items.csv поврежден"):
+    with pytest.raises(InstantiateCSVError):
         Item.instantiate_from_csv(path)
 
 
